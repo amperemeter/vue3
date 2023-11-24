@@ -1,12 +1,10 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import MyButton from "@/components/UI/MyButton.vue";
 import axios from "axios";
 
 export default {
   components: {
-    MyButton,
     PostForm, PostList,
   },
   data() {
@@ -14,6 +12,11 @@ export default {
       posts: [],
       dialogVisible: false,
       isPostLoading: false,
+      selectedSort: '0',
+      sortOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По содержимому'},
+      ]
     }
   },
   methods: {
@@ -49,15 +52,25 @@ export default {
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <MyButton class="btn_create" @click="showDialog">Создать пост</MyButton>
+
+    <div class="app_btns">
+      <MyButton @click="showDialog">Создать пост</MyButton>
+      <MySelect
+          v-model="selectedSort"
+          :options="sortOptions"
+      />
+    </div>
+
     <MyDialog v-model:show="dialogVisible">
       <PostForm @create="createPost"/>
     </MyDialog>
+
     <PostList
         v-if="!isPostLoading"
         :posts="posts"
         @remove="removePost"
     />
+
     <div v-else>Идет загрузка...</div>
   </div>
 </template>
@@ -73,7 +86,10 @@ export default {
   margin: 20px;
 }
 
-.btn_create {
+.app_btns {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
 }
+
 </style>
