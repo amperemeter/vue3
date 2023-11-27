@@ -15,6 +15,9 @@ export default {
       isPostLoading: false,
       selectedSort: '0',
       searchQuery: '',
+      page: 1,
+      totalPages: 0,
+      limit: 10,
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержимому'},
@@ -35,8 +38,15 @@ export default {
     async fetchPosts() {
       this.isPostLoading = true;
       try {
-        const url = 'https://jsonplaceholder.typicode.com/posts?_limit=10';
-        const response = await axios.get(url);
+        const url = 'https://jsonplaceholder.typicode.com/posts?0';
+        const response = await axios.get(url, {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        });
+
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
         this.posts = response.data;
       } catch (e) {
         alert(e);
@@ -44,9 +54,45 @@ export default {
         this.isPostLoading = false;
       }
     },
+    async loadMorePosts() {
+      this.page += 1;
+      try {
+        const url = 'https://jsonplaceholder.typicode.com/posts?0';
+        const response = await axios.get(url, {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        });
+
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert(e);
+      }
+    },
+    // changePage(pageNumber) {
+    //   this.page = pageNumber;
+    // },
+    observe() {
+      const options = {
+        rootMargin: "0px",
+        threshold: 1.0,
+      };
+
+      const callback = (entries) => {
+        if (entries[0].isIntersecting && this.page < this.totalPages) {
+          this.loadMorePosts();
+        }
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(this.$refs.observer);
+    }
   },
   mounted() {
     this.fetchPosts();
+    this.observe();
   },
   computed: {
     sortedPosts() {
@@ -59,6 +105,16 @@ export default {
         return post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       });
     }
+  },
+  watch: {
+    // page() {
+    //   this.fetchPosts();
+    // },
+    // posts() {
+    //   if (!this.posts.length) {
+    //     this.fetchPosts();
+    //   }
+    // }
   }
 }
 </script>
@@ -80,13 +136,23 @@ export default {
       <PostForm @create="createPost"/>
     </MyDialog>
 
-    <PostList
-        v-if="!isPostLoading"
-        :posts="sortedAndSearchedPosts"
-        @remove="removePost"
-    />
+    <div v-if="!isPostLoading">
+      <PostList
+          :posts="sortedAndSearchedPosts"
+          @remove="removePost"
+      />
+<!--      <div class="page-wrapper">-->
+<!--        <span-->
+<!--            v-for="pageNumber in totalPages"-->
+<!--            :key="pageNumber"-->
+<!--            :class="{'current_page': pageNumber === page}"-->
+<!--            @click="changePage(pageNumber)"-->
+<!--        >{{ pageNumber }}</span>-->
+<!--      </div>-->
+    </div>
 
     <div v-else>Идет загрузка...</div>
+    <div ref="observer" class="observer"></div>
   </div>
 </template>
 
@@ -107,4 +173,16 @@ export default {
   margin-bottom: 30px;
 }
 
+/*.page-wrapper {
+  display: flex;
+}
+
+.page-wrapper span {
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.current_page {
+  outline: 1px solid firebrick;
+}*/
 </style>

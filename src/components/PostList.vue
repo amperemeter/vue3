@@ -44,7 +44,7 @@ h4 {
 .user-list-enter-from,
 .user-list-leave-to {
   opacity: 0;
-  transform: translateX(130px);
+  transform: translateY(30px);
 }
 .user-list-move {
   transition: transform 0.4s ease;
