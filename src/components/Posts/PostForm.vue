@@ -1,6 +1,10 @@
 <script>
+import MyInput from "@/components/UI/MyInput.vue";
+import MyButton from "@/components/UI/MyButton.vue";
 
 export default {
+  components: {MyButton, MyInput},
+
   data() {
     return {
       post: {
@@ -10,6 +14,7 @@ export default {
       }
     }
   },
+
   methods: {
     createPost() {
       this.post.id = Date.now();
@@ -29,6 +34,7 @@ export default {
   <form @submit.prevent>
     <h4>Создание поста</h4>
     <MyInput
+        v-focus
         v-model="post.title"
         placeholder="Название"
     />

@@ -1,4 +1,6 @@
-export default {
+const VIntersection = {
+  name: 'intersection',
+
   mounted(el, binding) {
     const options = {
       rootMargin: "0px",
@@ -14,4 +16,6 @@ export default {
     const observer = new IntersectionObserver(callback, options);
     observer.observe(el);
   }
-}
+};
+
+export default VIntersection;

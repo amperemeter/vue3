@@ -9,8 +9,7 @@ import MyDialog from "@/components/UI/MyDialog.vue";
 
 export default {
   components: {
-    MyDialog, MySelect, MyButton,
-    MyInput, PostForm, PostList,
+    MyDialog, MySelect, MyButton, MyInput, PostForm, PostList,
   },
   data() {
     return {
