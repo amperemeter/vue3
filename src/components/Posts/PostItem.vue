@@ -1,5 +1,8 @@
 <script>
+import MyButton from "@/components/UI/MyButton.vue";
+
 export default {
+  components: {MyButton},
   props: {
     post: {
       type: Object,
@@ -17,6 +20,7 @@ export default {
       <div><strong>Описание: </strong>{{ post.body }}</div>
     </div>
     <div class="post_btns">
+      <MyButton @click="$router.push(`/post/${post.id}`)">Открыть</MyButton>
       <MyButton @click="$emit('remove', post)">Удалить</MyButton>
     </div>
   </div>
@@ -30,5 +34,11 @@ export default {
   padding: 15px;
   margin: 10px 0;
   border: 2px solid teal;
+}
+.post_btns {
+  display: flex;
+}
+.post_btns button {
+  margin-left: 8px;
 }
 </style>

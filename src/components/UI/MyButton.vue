@@ -12,10 +12,10 @@ export default {
 
 <style scoped>
 button {
-  margin-top: 10px;
   padding: 10px 15px;
   background: none;
   color: teal;
   border: 1px solid teal;
+  cursor: pointer;
 }
 </style>

@@ -1,5 +1,5 @@
 <script>
-import PostItem from "@/components/PostItem.vue";
+import PostItem from "@/components/Posts/PostItem.vue";
 
 export default {
   components: {PostItem},
