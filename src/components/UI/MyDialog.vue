@@ -1,17 +1,20 @@
 <script>
+import toggle_mixin from "@/mixins/toggle_mixin";
+
 export default {
   name: 'MyDialog',
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    }
-  },
-  methods: {
-    hideDialog() {
-      this.$emit('update:show', false);
-    }
-  }
+  mixins: [toggle_mixin],
+  // props: {
+  //   show: {
+  //     type: Boolean,
+  //     default: false,
+  //   }
+  // },
+  // methods: {
+  //   hideDialog() {
+  //     this.$emit('update:show', false);
+  //   }
+  // }
 }
 </script>
 
