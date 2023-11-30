@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      isPostLoading: false,
       page: 1,
       totalPages: 0,
       limit: 10,
@@ -30,13 +29,13 @@ export default {
   },
 
   methods: {
-    // createPost(post) {
-    //   this.posts.push(post);
-    //   this.dialogVisible = false;
-    // },
-    // removePost(post) {
-    //   this.posts = this.posts.filter(el => el.id !== post.id);
-    // },
+    createPost(post) {
+      // this.posts.push(post);
+      // this.dialogVisible = false;
+    },
+    removePost(post) {
+      // this.posts = this.posts.filter(el => el.id !== post.id);
+    },
     showDialog() {
       this.dialogVisible = true;
     },
@@ -107,14 +106,14 @@ export default {
     </div>
 
     <MyDialog v-model:show="dialogVisible">
-<!--      <PostForm @create="createPost"/>-->
+      <PostForm @create="createPost"/>
     </MyDialog>
 
     <div v-if="!isPostLoading">
       <PostList
           :posts="sortedAndSearchedPosts"
+          @remove="removePost"
       />
-<!--      @remove="removePost"-->
 
     </div>
 
