@@ -10,8 +10,9 @@ export default {
 <template>
 <div class="navbar">
   <div class="logo" @click="$router.push('/')">Vue3</div>
-  <div class="nav_btns" @click="$router.push('/posts')">
-    <MyButton>Посты</MyButton>
+  <div class="nav_btns">
+    <MyButton @click="$router.push('/posts')">Посты</MyButton>
+    <MyButton @click="$router.push('/store')">Store</MyButton>
   </div>
 </div>
 </template>
@@ -27,6 +28,10 @@ export default {
 
 .navbar * {
   cursor: pointer;
+}
+
+.nav_btns button {
+  margin-left: 8px;
 }
 
 </style>

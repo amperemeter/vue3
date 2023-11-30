@@ -78,25 +78,25 @@ export default {
     //   this.page = pageNumber;
     // },
 
-    // observe() {
-    //   const options = {
-    //     rootMargin: "0px",
-    //     threshold: 1.0,
-    //   };
-    //
-    //   const callback = (entries) => {
-    //     if (entries[0].isIntersecting && this.page < this.totalPages) {
-    //       this.loadMorePosts();
-    //     }
-    //   };
-    //
-    //   const observer = new IntersectionObserver(callback, options);
-    //   observer.observe(this.$refs.observer);
-    // }
+    observe() {
+      const options = {
+        rootMargin: "0px",
+        threshold: 1.0,
+      };
+
+      const callback = (entries) => {
+        if (entries[0].isIntersecting && this.page < this.totalPages) {
+          this.loadMorePosts();
+        }
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(this.$refs.observer);
+    }
   },
   mounted() {
     this.fetchPosts();
-    // this.observe();
+    this.observe();
   },
   computed: {
     sortedPosts() {
@@ -156,8 +156,7 @@ export default {
     </div>
 
     <div v-else>Идет загрузка...</div>
-<!--    <div ref="observer" class="observer"></div>-->
-    <div v-intersection="loadMorePosts" class="observer"></div>
+    <div ref="observer" class="observer"></div>
   </div>
 </template>
 
