@@ -10,6 +10,7 @@ export default {
     <div class="menu_links">
       <router-link to="/posts">Посты</router-link>
       <router-link to="/store">Посты со store</router-link>
+      <router-link to="/composition">Посты с composition</router-link>
     </div>
   </div>
 </template>

@@ -6,18 +6,19 @@ import MyInput from "@/components/UI/MyInput.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MySelect from "@/components/UI/MySelect.vue";
 import MyDialog from "@/components/UI/MyDialog.vue";
+import {usePosts} from "@/hooks/usePosts";
+import {useSort} from "@/hooks/useSort";
+import {useSortAndSearch} from "@/hooks/useSortAndSearch";
 
 export default {
   components: {
     MyDialog, MySelect, MyButton, MyInput, PostForm, PostList,
   },
+
   data() {
     return {
-      posts: [],
       dialogVisible: false,
       isPostLoading: false,
-      selectedSort: '0',
-      searchQuery: '',
       page: 1,
       totalPages: 0,
       limit: 10,
@@ -27,36 +28,17 @@ export default {
       ]
     }
   },
+
   methods: {
-    createPost(post) {
-      this.posts.push(post);
-      this.dialogVisible = false;
-    },
-    removePost(post) {
-      this.posts = this.posts.filter(el => el.id !== post.id);
-    },
+    // createPost(post) {
+    //   this.posts.push(post);
+    //   this.dialogVisible = false;
+    // },
+    // removePost(post) {
+    //   this.posts = this.posts.filter(el => el.id !== post.id);
+    // },
     showDialog() {
       this.dialogVisible = true;
-    },
-    async fetchPosts() {
-      this.isPostLoading = true;
-
-      try {
-        const url = 'https://jsonplaceholder.typicode.com/posts';
-        const response = await axios.get(url, {
-          params: {
-            _page: this.page,
-            _limit: this.limit,
-          }
-        });
-
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-        this.posts = response.data;
-      } catch (e) {
-        alert(e);
-      } finally {
-        this.isPostLoading = false;
-      }
     },
     async loadMorePosts() {
       this.page += 1;
@@ -75,9 +57,6 @@ export default {
         alert(e);
       }
     },
-    // changePage(pageNumber) {
-    //   this.page = pageNumber;
-    // },
 
     observe() {
       const options = {
@@ -95,31 +74,21 @@ export default {
       observer.observe(this.$refs.observer);
     }
   },
+
   mounted() {
-    this.fetchPosts();
     this.observe();
   },
-  computed: {
-    sortedPosts() {
-      return [...this.posts].sort((p1, p2) => {
-        return p1[this.selectedSort]?.localeCompare(p2[this.selectedSort]);
-      });
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter(post => {
-        return post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-      });
+
+  setup() {
+    const {posts, isPostLoading, totalPages} = usePosts(1, 10);
+    const {selectedSort, sortedPosts} = useSort(posts);
+    const {searchQuery, sortedAndSearchedPosts} = useSortAndSearch(sortedPosts);
+
+    return {
+      posts, isPostLoading, totalPages,
+      selectedSort, sortedPosts,
+      searchQuery, sortedAndSearchedPosts,
     }
-  },
-  watch: {
-    // page() {
-    //   this.fetchPosts();
-    // },
-    // posts() {
-    //   if (!this.posts.length) {
-    //     this.fetchPosts();
-    //   }
-    // }
   }
 }
 </script>
@@ -138,22 +107,15 @@ export default {
     </div>
 
     <MyDialog v-model:show="dialogVisible">
-      <PostForm @create="createPost"/>
+<!--      <PostForm @create="createPost"/>-->
     </MyDialog>
 
     <div v-if="!isPostLoading">
       <PostList
           :posts="sortedAndSearchedPosts"
-          @remove="removePost"
       />
-      <!--      <div class="page-wrapper">-->
-      <!--        <span-->
-      <!--            v-for="pageNumber in totalPages"-->
-      <!--            :key="pageNumber"-->
-      <!--            :class="{'current_page': pageNumber === page}"-->
-      <!--            @click="changePage(pageNumber)"-->
-      <!--        >{{ pageNumber }}</span>-->
-      <!--      </div>-->
+<!--      @remove="removePost"-->
+
     </div>
 
     <div v-else>Идет загрузка...</div>
@@ -168,17 +130,4 @@ export default {
   margin-bottom: 30px;
   margin-top: 10px;
 }
-
-/*.page-wrapper {
-  display: flex;
-}
-
-.page-wrapper span {
-  padding: 0 10px;
-  cursor: pointer;
-}
-
-.current_page {
-  outline: 1px solid firebrick;
-}*/
 </style>

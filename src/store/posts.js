@@ -57,7 +57,7 @@ export const postsModule = {
       commit('setPostLoading', true);
 
       try {
-        const url = 'https://jsonplaceholder.typicode.com/posts?0';
+        const url = 'https://jsonplaceholder.typicode.com/posts';
         const response = await axios.get(url, {
           params: {
             _page: state.page,
@@ -78,7 +78,7 @@ export const postsModule = {
       commit('setPage', state.page + 1);
 
       try {
-        const url = 'https://jsonplaceholder.typicode.com/posts?0';
+        const url = 'https://jsonplaceholder.typicode.com/posts';
         const response = await axios.get(url, {
           params: {
             _page: state.page,

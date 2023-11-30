@@ -13,6 +13,7 @@ export default {
   <div class="nav_btns">
     <MyButton @click="$router.push('/posts')">Посты</MyButton>
     <MyButton @click="$router.push('/store')">Store</MyButton>
+    <MyButton @click="$router.push('/composition')">Composition</MyButton>
   </div>
 </div>
 </template>
